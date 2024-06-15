@@ -51,6 +51,14 @@ jobs:
     
     - name: Build
       run: dotnet build -c Release --no-restore
+
+    - name: Run SonarQube Scanner
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: dotnet tool install --global dotnet-sonarscanner
+             && dotnet sonarscanner begin /k:".net" /d:sonar.host.url="http://20.192.19.199" /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+             && dotnet build --configuration Release
+             && dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
     
     - name: Test
       run: dotnet test test/Orleans.SyncWork.Tests/Orleans.SyncWork.Tests.csproj -c Release --no-build --verbosity normal --filter "Category!=LongRunning"
