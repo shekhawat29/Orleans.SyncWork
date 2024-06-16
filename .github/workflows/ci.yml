@@ -53,6 +53,7 @@ jobs:
       run: dotnet build -c Release --no-restore
 
     - name: Run SonarQube Scanner
+      secrets: inherit
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       run: |
